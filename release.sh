@@ -15,7 +15,7 @@ newnum=$(expr $oldnum + 1)
 echo "$oldnum"
 echo "$newnum"
 sed -iu "s/$oldnum/$newnum/g"  VERSION
-
+rm -f VERSIONu
 version=`cat VERSION`
 echo "version: $version"
 # run build
