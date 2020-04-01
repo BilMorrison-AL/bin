@@ -1,9 +1,7 @@
 #!/bin/bash
 set -eux
-# SET THE FOLLOWING VARIABLES
-# docker hub username
-# Environment variable
-export USERNAME="$GITHUBUSERNAME"
+# Docker and Git Hub username are assumed to be the same and is pulled from environment variable
+export USERNAME="$HUBUSERNAME"
 # Image name
 export IMAGE="$(cat NAME)"
 echo "$USERNAME/$IMAGE:latest"

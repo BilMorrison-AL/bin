@@ -1,32 +1,30 @@
 #!/bin/bash
-set -eux
-# SET THE FOLLOWING VARIABLES
-# docker hub username
-USERNAME=williammorrisonal
-# image name
-IMAGE=awscli-alpine
-# ensure we're up to date
+set -e
+# Container image name
+IMAGE="$(< NAME)"
+# Always make sure it is current
 git pull
-# bump version
-version="$(cat ./VERSION)"
+# Increment the minor version by one for every release
+version="$(< VERSION)"
+echo "Old Version: $version"
 docker images | grep "$IMAGE" | grep "$version" | awk '{print $3}'| xargs -I {} docker rmi -f {}
-oldnum=$(cut -d '.' -f3 ./VERSION)
+oldnum=$(cut -d '.' -f3 VERSION)
 newnum=$(expr $oldnum + 1)
 echo "$oldnum"
 echo "$newnum"
 sed -iu "s/$oldnum/$newnum/g"  VERSION
 rm -f VERSIONu
-version=`cat VERSION`
-echo "version: $version"
-# run build
+version=$(< VERSION)
+echo "New Version: $version"
+# Run build - Docker/Git Hub Username are defined in build
 build
-# tag it
 git add -A
 git commit -m "version $version"
+# Tag it
 git tag -a "$version" -m "version $version"
 git push
 git push --tags
 docker tag $USERNAME/$IMAGE:latest $USERNAME/$IMAGE:$version
-# push it
+# Push it to dockerhub
 docker push $USERNAME/$IMAGE:latest
 docker push $USERNAME/$IMAGE:$version
