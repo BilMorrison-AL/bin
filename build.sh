@@ -1,8 +1,8 @@
 #!/bin/bash
 set -eux
-# Docker and Git Hub username are assumed to be the same and is pulled from environment variable
-export USERNAME="$HUBUSERNAME"
+# Image name and version are pulled from files in the build directory: VERSION and NAME
+export version=$(< VERSION)
 # Image name
 export IMAGE="$(< NAME)"
-echo "$USERNAME/$IMAGE:latest"
-docker build --force-rm --no-cache -t "$USERNAME/$IMAGE:latest" .
+docker build --force-rm --no-cache -t "$IMAGE:latest" .
+docker build --force-rm --no-cache -t "$IMAGE:$version" .
