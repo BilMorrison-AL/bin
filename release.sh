@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eux
-# Docker and Git Hub username are assumed to be the same and is pulled from environment variable
-USERNAME="$HUBUSERNAME"
+# HUBNAME is either set to the organization name or your username
+REPONAME="$HUBNAME"
 # Image name
 IMAGE="$(< NAME)"
 # Always make sure it is current
@@ -22,9 +22,9 @@ echo "IMAGE  $IMAGE"
 docker build --force-rm --no-cache -t "$IMAGE:latest" .
 docker build --force-rm --no-cache -t "$IMAGE:$version" .
 
-echo "HUBUSERNAME:    $HUBUSERNAME/$IMAGE:$version"
-docker tag  "$IMAGE:$version"  "$HUBUSERNAME/$IMAGE:$version"
-docker tag  "$IMAGE:$version"  "$HUBUSERNAME/$IMAGE:latest"
+echo "Org-User Name  -  Image Name   -  Version number:    $HUBNAME/$IMAGE:$version"
+docker tag  "$IMAGE:$version"  "$HUBNAME/$IMAGE:$version"
+docker tag  "$IMAGE:$version"  "$HUBNAME/$IMAGE:latest"
 #
 git add -A
 git commit -m "Version $version"
@@ -34,5 +34,5 @@ git push
 git push --tags
 echo "version   $version"
 # Push it to dockerhub
-docker push "$HUBUSERNAME/$IMAGE:$version"
-docker push "$HUBUSERNAME/$IMAGE:latest"
+docker push "$HUBNAME/$IMAGE:$version"
+docker push "$HUBNAME/$IMAGE:latest"
