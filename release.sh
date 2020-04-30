@@ -10,10 +10,11 @@ git pull
 version="$(< VERSION)"
 echo "Old Version:    $version"
 docker images | grep "$IMAGE" | grep "$version" | awk '{print $3}'| xargs -I {} docker rmi -f {}
-oldnum=$(cut -d '.' -f3 VERSION)
-newnum=$(( $oldnum + 1 ))
+oldminornum=$(cut -d '.' -f3 VERSION)
+newminornum=$(( $oldminornum + 1 ))
 #   $((..)), ${} or [[ ]]
-sed -iu "s/$oldnum/$newnum/g"  VERSION
+sed -iu "s/[0-9]\.[0-9]\.$oldminornum/1\.1\.$newminornum/" VERSION
+#sed -iu "s/$oldminornum/$newminornum/g"  VERSION
 rm -f VERSIONu
 version=$(< VERSION)
 echo "New Version:    $version"
