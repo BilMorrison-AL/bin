@@ -1,13 +1,16 @@
 #!/bin/bash
 set -eux
-# HUBNAME is either set to the organization name or your username
-REPONAME="$HUBNAME"
-# Image name
-IMAGE="$(< NAME)"
+# Repo name for aws not using Dockerhub, otherwise use REPONAME="$HUBNAME"
+REPONAME="894680052389.dkr.ecr.us-east-1.amazonaws.com"
 # Always make sure it is current
 git pull
-# Increment the minor version by one for every release
+# Make sure connected to AWS
+export AWS_PAGER=""
+aws sts get-caller-identity | grep '894680052389' && echo 'Yes aws sso logged in' || echo "Need to run > aws sso login"
+# Image name and version are pulled from files in the build directory: VERSION and NAME
 version="$(< VERSION)"
+IMAGE="$(< NAME)"
+# Increment the minor version by one for every release
 echo "Old Version:    $version"
 docker images | grep "$IMAGE" | grep "$version" | awk '{print $3}'| xargs -I {} docker rmi -f {}
 oldminornum=$(cut -d '.' -f3 VERSION)

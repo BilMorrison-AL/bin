@@ -1,14 +1,9 @@
 #!/bin/bash
 set -eux
 # HUBNAME is either set to the organization name or your username
-# Repo name for aws not using Dockerhub, otherwise use REPONAME="$HUBNAME"
-REPONAME="894680052389.dkr.ecr.us-east-1.amazonaws.com"
-# Image name
+REPONAME="$HUBNAME"
 # Always make sure it is current
 git pull
-# Make sure connected to AWS
-export AWS_PAGER=""
-aws sts get-caller-identity | grep '894680052389' && echo 'Yes aws sso logged in' || aws sso login
 # Image name and version are pulled from files in the build directory: VERSION and NAME
 version="$(< VERSION)"
 IMAGE="$(< NAME)"
