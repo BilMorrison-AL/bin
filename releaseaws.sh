@@ -1,6 +1,6 @@
 #!/bin/bash
 set -eux
-# Repo name for aws not using Dockerhub, otherwise use REPONAME="$HUBNAME"
+# Repo name for aws not using Dockerhub
 REPONAME="894680052389.dkr.ecr.us-east-1.amazonaws.com"
 # Always make sure it is current
 git pull
@@ -26,9 +26,9 @@ echo "IMAGE  $IMAGE"
 docker build --force-rm --no-cache -t "$IMAGE:latest" .
 docker build --force-rm --no-cache -t "$IMAGE:$version" .
 
-echo "Org-User Name  -  Image Name   -  Version number:    $HUBNAME/$IMAGE:$version"
-docker tag  "$IMAGE:$version"  "$HUBNAME/$IMAGE:$version"
-docker tag  "$IMAGE:$version"  "$HUBNAME/$IMAGE:latest"
+echo "Org - Image - Version:     $REPONAME/$IMAGE:$version"
+docker tag "$IMAGE:$version" "$REPONAME/$IMAGE:$version"
+docker tag "$IMAGE:$version" "$REPONAME/$IMAGE:latest"
 #
 git add -A
 git commit -m "Version $version"
@@ -38,5 +38,5 @@ git push
 git push --tags
 echo "version   $version"
 # Push it to dockerhub
-docker push "$HUBNAME/$IMAGE:$version"
-docker push "$HUBNAME/$IMAGE:latest"
+docker push "$REPONAME/$IMAGE:$version"
+docker push "$REPONAME/$IMAGE:latest"
