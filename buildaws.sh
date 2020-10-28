@@ -7,7 +7,7 @@ aws sts get-caller-identity | grep '894680052389' && echo 'Yes aws sso logged in
 # Image name and version are pulled from files in the build directory: VERSION and NAME
 export version=$(< VERSION)
 export IMAGE="$(< NAME)"
-docker build --force-rm --no-cache -t "$IMAGE:latest" .
-docker build --force-rm --no-cache -t "$IMAGE:$version" .
-docker build --force-rm --no-cache -t "$REPONAME/$IMAGE:latest" .
-docker build --force-rm --no-cache -t "$REPONAME/$IMAGE:$version" .
+#docker build --force-rm --no-cache -t "${IMAGE}:latest" .
+#docker build --force-rm --no-cache -t "${IMAGE}:${version}" .
+docker build --force-rm --no-cache -t "${REPONAME}/${IMAGE}:latest" .
+docker build --force-rm --no-cache -t "${REPONAME}/${IMAGE}:${version}" .

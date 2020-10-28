@@ -1,7 +1,8 @@
 #!/bin/bash
 set -eux
-# HUBNAME is either set to the organization name or your username
-REPONAME="$HUBNAME"
+# REPONAME is either set to the organization name or your username
+export REPONAME="angieslist"
+#export REPONAME="williammorrisonal"
 # Always make sure it is current
 git pull
 # Image name and version are pulled from files in the build directory: VERSION and NAME
@@ -20,12 +21,12 @@ version=$(< VERSION)
 echo "New Version:    $version"
 echo "IMAGE  $IMAGE"
 # Run build - Docker/Git Hub Username are defined in build
-docker build --force-rm --no-cache -t "$IMAGE:latest" .
-docker build --force-rm --no-cache -t "$IMAGE:$version" .
+docker build --force-rm --no-cache -t "$REPONAME/$IMAGE:latest" .
+docker build --force-rm --no-cache -t "$REPONAME/$IMAGE:$version" .
 
-echo "Org-User Name  -  Image Name   -  Version number:    $HUBNAME/$IMAGE:$version"
-docker tag  "$IMAGE:$version"  "$HUBNAME/$IMAGE:$version"
-docker tag  "$IMAGE:$version"  "$HUBNAME/$IMAGE:latest"
+echo "Org-User Name  -  Image Name   -  Version number:    $REPONAME/$IMAGE:$version"
+docker tag  "$IMAGE:$version"  "$REPONAME/$IMAGE:$version"
+docker tag  "$IMAGE:$version"  "$REPONAME/$IMAGE:latest"
 #
 git add -A
 git commit -m "Version $version"
@@ -35,5 +36,5 @@ git push
 git push --tags
 echo "version   $version"
 # Push it to dockerhub
-docker push "$HUBNAME/$IMAGE:$version"
-docker push "$HUBNAME/$IMAGE:latest"
+docker push "$REPONAME/$IMAGE:$version"
+docker push "$REPONAME/$IMAGE:latest"
