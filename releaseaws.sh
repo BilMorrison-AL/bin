@@ -9,6 +9,7 @@ export AWS_PAGER=""
 aws --version
 #$(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
 aws sts get-caller-identity | grep '894680052389' && echo 'Yes aws sso logged in' || echo "Need to run > aws sso login"
+aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "${REPO}"
 # Image name and version are pulled from files in the build directory: VERSION and NAME
 version="$(< VERSION)"
 name="$(< NAME)"
@@ -39,7 +40,8 @@ git commit -m "Version ${version}"
 git tag -a "${version}" -m "Version ${version}"
 git push
 git push --tags
-echo "version   ${version}"
+
+echo "Push Container Image  ${version}  to  ${REPO}"
 # Push it to dockerhub
 docker push "${REPO}/${name}:${version}"
 docker push "${REPO}/${name}:latest"
