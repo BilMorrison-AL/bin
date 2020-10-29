@@ -27,23 +27,22 @@ echo "New Version  ${name}   :  ${version}"
 echo ''
 # Run build - Docker/Git Hub Username are defined in build
 #docker build --force-rm --no-cache -t "${REPO}/${name}:${version}" .
-docker build --force-rm --no-cache -t "${REPO}/${name}:latest" .
+docker build --force-rm --no-cache -t "${name}:latest" .
 echo ''
 echo "Org - Image - Version"
 echo "${REPO}/${name}:${version}"
 #docker tag "$name:$version" "${REPO}/${name}:${version}"
-docker tag "${REPO}/${name}:latest" "${REPO}/${name}:${version}"
-#
-git add -A
-git commit -m "Version ${version}"
+docker tag "${name}":latest "${REPO}/${name}":latest
+## git add -A
+## git commit -m "Version ${version}"
 # Tag it
-git tag -a "${version}" -m "Version ${version}"
-git push
-git push --tags
+## git tag -a "${version}" -m "Version ${version}"
+## git push
+## git push --tags
 
 echo "Push Container Image  ${version}  to  ${REPO}"
 # Push it to dockerhub
-docker push "${REPO}/${name}:${version}"
-docker push "${REPO}/${name}:latest"
+# docker push "${REPO}/${name}:${version}"
+docker push "${REPO}/${name}":latest
 #
 printf '[{"name":"${name}","imageUri":"%s"}]' "${REPO}/${name}:${version}" > ./imagedefinitions.json
