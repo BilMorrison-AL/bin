@@ -7,6 +7,7 @@ REPO="894680052389.dkr.ecr.us-east-1.amazonaws.com"
 echo '---'
 # Always make sure it is current
 ALPROFILE=' --profile sysops-permission-set-894680052389 '
+AWS_DEFAULT_REGION='us-east-1'
 # Pull down any changes from remote origin
 ## git pull
 echo "AWS Version"
@@ -14,7 +15,7 @@ aws ${ALPROFILE}--version
 export AWS_PAGER=""
 # Make sure connected to AWS
 #   "${AL}"
-#$(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+## export ECR="$(aws ecr get-login --region $AWS_DEFAULT_REGION)"
 #aws sts get-caller-identity | grep '894680052389' && echo 'Yes aws sso logged in' || echo "Need to run > aws sso login"
 #aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "${REPO}"
 
@@ -22,7 +23,7 @@ export AWS_PAGER=""
 
 #AWSTOKEN="$(aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${REPO})"
 echo ''
-#echo "$AWSTOKEN" | docker login -u AWS --password-stdin "$REPO"
+## echo "${ECR}" | docker login -u AWS --password-stdin "$REPO"
 
 # Image name and version are pulled from files in the build directory: VERSION and NAME
 version="$(< VERSION)"
@@ -41,7 +42,7 @@ echo "New Version  ${name}   :  ${version}"
 echo ''
 # Run build - Docker/Git Hub Username are defined in build
 #docker build --force-rm --no-cache -t "${REPO}/${name}:${version}" .
-docker build --force-rm --no-cache -t "${REPO}/${name}:${version}" .
+docker build --force-rm --no-cache -t "${REPO}/${name}:${version}" -t "${REPO}/${name}:latest" .
 echo ''
 echo "Org - Image - Version"
 echo "${REPO}/${name}:${version}"
@@ -63,6 +64,6 @@ git push --tags
 echo "Push Container Image  ${version}  to  ${REPO}"
 echo 'Push it to ECR'
 # docker push "${REPO}/${name}:${version}"
-docker push "${REPO}/${name}":latest
+docker push "${REPO}/${name}:${version}"
 #
 printf '[{"name":"${name}","imageUri":"%s"}]' "${REPO}/${name}:${version}" > ./imagedefinitions.json
